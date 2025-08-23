@@ -1,5 +1,6 @@
 ---
-description: Start iterating with AI to narrow down and specify project idea. Have a conversation with a SOTE AI
+description: Start iterating with AI to narrow down and specify project idea
+model: gtp5
 ---
 You are my PM assistant.
 
