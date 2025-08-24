@@ -17,7 +17,7 @@ Build a minimal Node.js-compatible library that converts HTML email content into
 - **Runtime: Bun** — chosen for fast dev loop, but npm publish ensures Node compatibility.
 - **Language: TypeScript** — adds type safety with minimal overhead.
 - **Package Manager: Bun** — integrated with runtime, simplifies workflows.
-- **Build/Packaging: Vite** — provides modern bundling and easy dual-target (CJS/ESM).
+- **Build/Packaging: Vite** — provides modern bundling and easy dual-target (ESM/IIFE).
 - **HTML Parsing: parse5** — spec-compliant, robust against quirks in email HTML.
 - **Entity Decoding: he** — covers all HTML entities reliably.
 - **Testing: Vitest** — Bun-compatible, fast test runner with good DX.
@@ -26,7 +26,7 @@ Build a minimal Node.js-compatible library that converts HTML email content into
 
 ## Architecture Overview
 
-The library exposes a single synchronous function `htmlToText(html: string): string`. Input is parsed with `parse5` into an AST. The tree is traversed recursively, converting nodes into plain-text fragments. Links are formatted as `[text](URL)` or URL-only. Lists and tables are mapped to text representations with simple Markdown-like syntax. Entities are decoded with `he` before output. The final result is concatenated into a plain-text string. State lives only in the function call stack; no persistent state or global context. Build emits both CJS and ESM bundles. Tests validate representative HTML email fixtures.
+The library exposes a single synchronous function `htmlToText(html: string): string`. Input is parsed with `parse5` into an AST. The tree is traversed recursively, converting nodes into plain-text fragments. Links are formatted as `[text](URL)` or URL-only. Lists and tables are mapped to text representations with simple Markdown-like syntax. Entities are decoded with `he` before output. The final result is concatenated into a plain-text string. State lives only in the function call stack; no persistent state or global context. Build emits both ESM and IIFE bundles. Tests validate representative HTML email fixtures.
 
 ## Data Model
 

@@ -20,7 +20,7 @@
   - Empty function `htmlToText(html:string):string` returning stub.
 
 - **Acceptance criteria:**
-  - `bun run build` produces CJS + ESM bundles.
+  - `bun run build` produces ESM + IIFE bundles.
   - CI runs automatically on PR and passes.
 
 - **Exit tests:**
@@ -33,7 +33,7 @@
 
 - **Metrics target:** 100% green CI.
 - **Dependencies:** Bun, TypeScript, Vite.
-- **Risks & mitigations:** Incorrect bundling → mitigate by verifying both CJS and ESM builds.
+- **Risks & mitigations:** Incorrect bundling → mitigate by verifying both ESM and IIFE builds.
 - **Estimate:** 1 day.
 - **Owner:** Dev team.
 

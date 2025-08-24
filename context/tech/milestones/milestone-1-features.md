@@ -25,16 +25,16 @@
 
 ## [ ] Feature 2: Build System Configuration
 - **Scope:** 3 (Medium complexity, dual-bundle setup)
-- **Description:** Configure Vite to produce both CJS and ESM bundles
+- **Description:** Configure Vite to produce both ESM and IIFE bundles
 - **Tasks:**
   - Create `vite.config.ts` with dual-target build
   - Configure build scripts in `package.json`
   - Set up TypeScript declaration generation
   - Test both bundle formats work correctly
 - **Acceptance Criteria:**
-  - `bun run build` produces both `.js` (ESM) and `.cjs` files
+  - `bun run build` produces both `.js` (ESM) and `.iife.js` files
   - Type declarations (.d.ts) are generated
-  - Both bundles can be imported/required
+  - Both bundles work correctly (import for ESM, global variable for IIFE)
 - **Dependencies:** Feature 1 (dev environment)
 - **Estimate:** 4-6 hours
 
@@ -96,13 +96,13 @@
 - **Scope:** 2 (Package configuration)
 - **Description:** Configure package.json for npm publishing and local installation
 - **Tasks:**
-  - Configure `package.json` exports for dual-format
+  - Configure `package.json` exports for ESM + IIFE format
   - Set up proper module resolution
   - Test local package installation (`npm pack` + local install)
   - Verify import/require works from external project
 - **Acceptance Criteria:**
   - Package can be installed locally via `npm install ./package.tgz`
-  - Both `import` and `require` work correctly
+  - Both `import` (ESM) and script tag (IIFE) work correctly
   - TypeScript declarations are available to consumers
 - **Dependencies:** Feature 2 (build system), Feature 4 (core library)
 - **Estimate:** 2-3 hours
@@ -120,6 +120,6 @@
 
 ## Success Metrics
 - All 6 features implemented and tested
-- `bun run build` produces working CJS + ESM bundles
+- `bun run build` produces working ESM + IIFE bundles
 - CI pipeline green with all checks passing
 - Package installable locally and imports work correctly
