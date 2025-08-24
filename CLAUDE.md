@@ -37,6 +37,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # Workflow
 
+- Explain what you’ll do first and ask for my confirmation before coding
+- Default to the simplest solution first
+- Use modules rather than large files
+- Only make the changes I request
+- Avoid code duplication, look for existing solutions in the codebase
+- Use vertical architecture: features end to end in small complete slices
 - Run `bun run format` before committing (Husky pre-commit hooks enforce this)
 - Check TypeScript compilation with build command after code changes
 - Bundle names automatically derive from `package.json` name field

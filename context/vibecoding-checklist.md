@@ -33,14 +33,14 @@
 - [x] start with a premade template that uses the selected tech stack, the closest I find to what I need. It's okay if something needs to be integrated beside. Use gemini deep research to find best template
 - [x] Make sure all gen docs from above live in /context folder
 - [x] Run initial audit of the template (see audit)
-- [ ] scaffold CLAUDE.md
+- [x] scaffold CLAUDE.md
 - Is codebase fairly complex and modular?
   - YES
   - [ ] scaffold CLAUDE.md for each key subfolder (/init:deep)
     - [ ] the /init:deep command should be written by hand customized to what I need
   - NO
-    - [ ] use /init command from CLAUDE.md (kinda depends on codebase size and complexity)
-- [ ] go over each CLAUDE.md file and customize by hand (see coding rules)
+    - [x] use /init command from CLAUDE.md (kinda depends on codebase size and complexity)
+- [x] go over each CLAUDE.md file and customize by hand (see coding rules)
 
 1. **Coding loop**
 
