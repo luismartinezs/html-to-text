@@ -2,28 +2,29 @@
 
 1. **PMing**
 - [x] start with codebase idea
-- [x] iterate with SOTE AI to narrow it down
-- [x] create codebase folder with memo folder to add all the docs
+- [x] iterate with SOTE AI to narrow it down (001-narrowing.md -> 001-narrowed.md)
+- [x] create codebase folder with context folder to add all the docs
 - [x] AI: gen PRD.md, read and validate
 - [x] iterate with AI to draft tech-spec, wide-adoption, well-docu tech. Use score system to rank options
 - [x] AI: gen tech-spec.md (it should include reasoning behind tech picks), read and validate
 - [x] AI: gen API contract (api-contract.md), read and validate
 - [x] AI: gen milestones.md (<= 5 milestones), read and validate
+- outputs: prd.md, tech-spec.md, api-contract.md, milestones.md
 
-2. **UI/UX**
+1. **UI/UX**
 - [ ] list simplest UI needed, simplest user flow
 - [ ] sketch rough wireframes
 - [ ] select premade component lib to get most of work done
 
-3. **Codebase scaffold**
-- [ ] start with a premade template that uses the selected tech stack, the closest I find to what I need. It's okay if something needs to be integrated beside
-- [ ] Make sure all gen docs from above live in /memo folder
+1. **Codebase scaffold**
+- [x] start with a premade template that uses the selected tech stack, the closest I find to what I need. It's okay if something needs to be integrated beside. Use gemini deep research to find best template
+- [ ] Make sure all gen docs from above live in /context folder
 - [ ] Run initial audit of the template (see audit)
 - [ ] scaffold CLAUDE.md for each key subfolder (/init:deep)
   - [ ] the /init:deep command should be written by hand customized to what I need
 - [ ] go over each CLAUDE.md file and customize by hand (see coding rules)
 
-4. **Coding loop**
+1. **Coding loop**
 - [ ] Select next milestone to complete
 - [ ] Select next feature to implement
 - [ ] Evaluate feature complexity (rough planning poker)
@@ -44,7 +45,7 @@
   - [ ] perform security audit: repomix to gemini, gather security insights (see below security patterns). Take each issue and treat it like a task (same loop as above). Loop until Gemini no longer flags issues and you have verified them manually. Do *not* blindly trust in anything gemini says, understand *everything* you merge
   - [ ] Go over Quality Assurance Checklist (see checklist below)
 
-5. **Codebase Audit**
+1. **Codebase Audit**
 Do this before merging to main and before releasing to production
 - [ ] security audit
   - [ ] repomix -> gemini: act as a security expert and spot flaws. take insights and copy to claude to fix (use coding loop). Loop until issues 100% fixed. Do not do it blindly! Curate each issue! Do not try to fix everything at the same time!
@@ -83,3 +84,9 @@ Do this before merging to main and before releasing to production
 # debugging
 - [ ] ask AI to fix it (with error as context), if after 3 attempts still broken, REVERT (undo everything, tweak prompt and start from scratch)
 - [ ] stubborn bugs: overview of the components the error is coming from and list top suspects that cause the error. Add logs. Give logs as context to diagnose cause of error. Then fix cause
+
+# agent / command / CLAUDE.md / context generation
+- [ ] ask gemini deep research to research and find best practices for a specific field
+- [ ] ask Opus or chatgpt to summarize research results
+- [ ] ask claude code to create agent / command / CLAUDE.md following best practices summary
+- [ ] ask claude to review anthropic best practices (https://www.anthropic.com/engineering/claude-code-best-practices) and make sure the new agent / command / CLAUDE.md adheres to them
