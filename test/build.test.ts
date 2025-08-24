@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import { spawn } from "child_process";
-import vm from "node:vm";
+import { JSDOM } from "jsdom";
 
 const BUILD_DIR = join(process.cwd(), "build/dist");
 
@@ -47,17 +47,35 @@ describe("Build System", () => {
     expect(sum(2, 3)).toBe(5);
   });
 
-  it("should have working IIFE bundle", () => {
+  it("should have working IIFE bundle", async () => {
     // Test 4b: IIFE bundle works correctly (global variable)
     const iifeContent = readFileSync(
       join(BUILD_DIR, "html-to-text.iife.js"),
       "utf-8"
     );
 
-    const context = { htmlToText: undefined };
-    const code = `${iifeContent}; htmlToText`;
+    // Use JSDOM instead of vm module for secure execution (prevents VM escape vulnerabilities)
+    const dom = new JSDOM(
+      `<!DOCTYPE html><html><head></head><body></body></html>`,
+      {
+        runScripts: "dangerously",
+        resources: "usable",
+      }
+    );
 
-    const htmlToText = vm.runInNewContext(code, context);
-    expect(htmlToText.sum(2, 3)).toBe(5);
+    try {
+      // Execute the IIFE bundle in JSDOM context
+      const script = dom.window.document.createElement("script");
+      script.textContent = iifeContent;
+      dom.window.document.head.appendChild(script);
+
+      // Access the global htmlToText variable and test it
+      const htmlToText = dom.window.htmlToText;
+      expect(htmlToText).toBeDefined();
+      expect(htmlToText.sum(2, 3)).toBe(5);
+    } finally {
+      // Clean up JSDOM resources
+      dom.window.close();
+    }
   });
 });
