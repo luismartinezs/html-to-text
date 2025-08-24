@@ -11,30 +11,38 @@ Investigation revealed that `dts-bundle-generator` **only supports CommonJS conf
 ## Minimal Solution (15 minutes total)
 
 ### [x] Step 1: Fix Configuration (5 minutes)
+
 **Task:** Revert `dts-bundle-generator.config.ts` to use CommonJS syntax
 **Action:** Change `export default config;` back to `module.exports = config;`
 **Rationale:** Tool limitation - dts-bundle-generator cannot parse ESM configs
 
 ### [x] Step 2: Test Build Process (5 minutes)
+
 **Task:** Verify build completes successfully
 **Action:** Run `bun run build` command
 **Expected Output:**
+
 - `build/dist/html-to-text.js` (ESM bundle)
 - `build/dist/html-to-text.iife.js` (IIFE bundle)
 - `build/dist/index.d.ts` (TypeScript declarations)
 - `build/dist/html-to-text.css` (styles)
 
 ### [x] Step 3: Validate Bundle Functionality (5 minutes)
+
 **ESM Test:**
+
 ```javascript
-import { sum } from './build/dist/html-to-text.js';
+import { sum } from "./build/dist/html-to-text.js";
 console.log(sum(2, 3)); // Should output: 5
 ```
 
 **IIFE Test:**
+
 ```html
 <script src="./build/dist/html-to-text.iife.js"></script>
-<script>console.log(window.htmlToText.sum(2, 3));</script>
+<script>
+  console.log(window.htmlToText.sum(2, 3));
+</script>
 ```
 
 **TypeScript Test:** Verify import provides proper type inference

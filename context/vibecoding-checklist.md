@@ -48,7 +48,7 @@
 - [x] Split milestone into features. Provide PRD, tech spec and milestones docs as context
 - [x] Select next feature to implement
 - [x] Evaluate feature complexity (rough planning poker)
-- [ ] checkout to a new feature branch
+- [x] checkout to a new feature branch
 - [ ] Break feature down into simple small components (if case of doubt, break it down further), each component should be scope 2 tops (in terms of poker planning)
 - [ ] Implement in this order:
   - [ ] determine task complexity to decide prompting strategy (low, medium, high)
