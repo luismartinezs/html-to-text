@@ -1,17 +1,33 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
-import { execSync } from "child_process";
+import { spawn } from "child_process";
 import vm from "node:vm";
 
 const BUILD_DIR = join(process.cwd(), "build/dist");
 
 describe("Build System", () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     // Test 1: bun run build does not error out
-    expect(() => {
-      execSync("bun run build", { stdio: "pipe" });
-    }).not.toThrow();
+    await new Promise<void>((resolve, reject) => {
+      // Use spawn with shell: false to prevent command injection vulnerabilities
+      const buildProcess = spawn("bun", ["run", "build"], {
+        stdio: "pipe",
+        shell: false,
+      });
+
+      buildProcess.on("close", code => {
+        if (code === 0) {
+          resolve();
+        } else {
+          reject(new Error(`Build process exited with code ${code}`));
+        }
+      });
+
+      buildProcess.on("error", error => {
+        reject(new Error(`Build process failed to start: ${error.message}`));
+      });
+    });
   }, 30000);
 
   it("should generate .js and .iife.js files", () => {
