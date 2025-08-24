@@ -1,12 +1,12 @@
 {
-  "name": "vite-vanilla-ts-lib-starter",
+  "name": "html-to-text",
   "private": true,
   "version": "0.0.6",
-  "module": "./dist/vite-vanilla-ts-lib-starter.js",
+  "module": "./dist/html-to-text.js",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/vite-vanilla-ts-lib-starter.js"
+      "import": "./dist/html-to-text.js"
     },
     "./dist/": {
       "import": "./dist/"

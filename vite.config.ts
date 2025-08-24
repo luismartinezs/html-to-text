@@ -1,3 +1,11 @@
+/**
+ * Vite configuration for library build
+ * - Dynamically generates bundle names from package.json name field
+ * - Converts kebab-case package names to camelCase for IIFE format
+ * - Builds both ES modules (.js) and IIFE (.iife.js) formats
+ * - Sets up path aliases: @/ -> src/, @@/ -> project root
+ * - Integrates Vitest for testing
+ */
 /// <reference types="vitest" />
 import path from "path";
 import { defineConfig } from "vite";
