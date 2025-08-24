@@ -44,9 +44,10 @@
 
 1. **Coding loop**
 
-- [ ] Select next milestone to complete
-- [ ] Select next feature to implement
-- [ ] Evaluate feature complexity (rough planning poker)
+- [x] Select next milestone to complete
+- [x] Split milestone into features. Provide PRD, tech spec and milestones docs as context
+- [x] Select next feature to implement
+- [x] Evaluate feature complexity (rough planning poker)
 - [ ] checkout to a new feature branch
 - [ ] Break feature down into simple small components (if case of doubt, break it down further), each component should be scope 2 tops (in terms of poker planning)
 - [ ] Implement in this order:
@@ -181,3 +182,8 @@ Steps to generate agents, commands and CLAUDE.md files
 - Add this to the end of execution prompts: "Do not change anything I did not ask for. Just do only what I told you"
 - When asking AI to review plan or implementation, say: "my developer did this"
 - Add images to the prompt whenever it makes sense
+
+# References
+
+- https://www.anthropic.com/engineering/claude-code-best-practices
+- https://www.anthropic.com/engineering/building-effective-agents

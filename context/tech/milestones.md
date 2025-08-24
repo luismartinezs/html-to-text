@@ -6,7 +6,7 @@
 
 ---
 
-## Milestone 1
+## [ ] Milestone 1
 
 - **Name:** Project Setup & Core Skeleton
 - **Objective:** Establish development environment and implement basic library structure.
@@ -39,7 +39,7 @@
 
 ---
 
-## Milestone 2
+## [ ] Milestone 2
 
 - **Name:** Core Parsing & Entities
 - **Objective:** Implement HTML parsing and entity decoding.
@@ -69,7 +69,7 @@
 
 ---
 
-## Milestone 3
+## [ ] Milestone 3
 
 - **Name:** Structured Elements (Links, Lists, Tables)
 - **Objective:** Implement conversion for lists, links, and tables.
@@ -100,7 +100,7 @@
 
 ---
 
-## Milestone 4
+## [ ] Milestone 4
 
 - **Name:** Final Hardening & Release
 - **Objective:** Ensure robustness, finalize tests, release to npm.
