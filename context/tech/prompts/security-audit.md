@@ -18,4 +18,3 @@ Some specific security patterns you should consider, albeit not exclusively:
 <codebase>
 {paste repomix output}
 </codebase>
-
