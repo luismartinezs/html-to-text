@@ -102,6 +102,8 @@
 
 # agent / command / CLAUDE.md / context generation
 
+Steps to generate agents, commands and CLAUDE.md files
+
 - [ ] ask gemini deep research to research and find best practices for a specific field
 - [ ] ask Opus or chatgpt to summarize research results
 - [ ] ask claude code to create agent / command / CLAUDE.md following best practices summary
