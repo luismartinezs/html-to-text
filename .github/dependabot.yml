@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "@luis"
+    assignees:
+      - "@luis"
+    commit-message:
+      prefix: "security"
+      include: "scope"
+    # Only create PRs for security updates and major version updates
+    allow:
+      - dependency-type: "all"
+    # Group updates to reduce noise
+    groups:
+      security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      dev-dependencies:
+        dependency-type: "development"
+        patterns:
+          - "*"
