@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 
 describe("Package Publishing Configuration", () => {
@@ -11,7 +11,9 @@ describe("Package Publishing Configuration", () => {
         throw new Error("Build package.json does not exist. Run build first.");
       }
 
-      const packageJson = require(buildPackageJsonPath);
+      const packageJson = JSON.parse(
+        readFileSync(buildPackageJsonPath, "utf-8")
+      );
       expect(packageJson.private).not.toBe(true);
     });
 
@@ -22,7 +24,9 @@ describe("Package Publishing Configuration", () => {
         throw new Error("Build package.json does not exist. Run build first.");
       }
 
-      const packageJson = require(buildPackageJsonPath);
+      const packageJson = JSON.parse(
+        readFileSync(buildPackageJsonPath, "utf-8")
+      );
 
       expect(packageJson.exports).toBeDefined();
       expect(packageJson.exports["."]).toBeDefined();
@@ -43,7 +47,9 @@ describe("Package Publishing Configuration", () => {
         throw new Error("Build package.json does not exist. Run build first.");
       }
 
-      const packageJson = require(buildPackageJsonPath);
+      const packageJson = JSON.parse(
+        readFileSync(buildPackageJsonPath, "utf-8")
+      );
 
       expect(packageJson.types).toBe("./dist/index.d.ts");
       expect(packageJson.exports["."].types).toBe("./dist/index.d.ts");
