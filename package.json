@@ -1,12 +1,13 @@
 {
   "name": "html-to-text",
-  "private": true,
   "version": "0.0.6",
   "module": "./dist/html-to-text.js",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/html-to-text.js"
+      "import": "./dist/html-to-text.js",
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/html-to-text.iife.js"
     },
     "./dist/": {
       "import": "./dist/"
