@@ -6,7 +6,7 @@
 
 ---
 
-## [ ] Milestone 1
+## [x] Milestone 1
 
 - **Name:** Project Setup & Core Skeleton
 - **Objective:** Establish development environment and implement basic library structure.
