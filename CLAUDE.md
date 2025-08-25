@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `bun run dev` - Start development server with hot reload
 - `bun run build` - Build the library (compiles TypeScript, runs Vite build, bundles type definitions)
+- `bun run typecheck` - Run TypeScript compiler type checking
+- `bun run typecheck:watch` - Run TypeScript type checking in watch mode
 - `bun test` - Run test suite with Vitest
 - `bun run test:coverage` - Run tests with coverage report
 - `bun run lint:scripts` - Lint TypeScript files with ESLint
