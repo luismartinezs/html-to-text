@@ -3,6 +3,23 @@ import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import yaml from "js-yaml";
 
+interface WorkflowStep {
+  uses?: string;
+  run?: string;
+  name?: string;
+}
+
+interface WorkflowJob {
+  "runs-on": string;
+  steps: WorkflowStep[];
+}
+
+interface GitHubWorkflow {
+  name?: string;
+  on: string | string[] | Record<string, unknown>;
+  jobs: Record<string, WorkflowJob>;
+}
+
 const WORKFLOW_PATH = join(process.cwd(), ".github/workflows/ci.yml");
 
 describe("CI Workflow Configuration", () => {
@@ -17,14 +34,14 @@ describe("CI Workflow Configuration", () => {
 
   it("should trigger on pull request events", () => {
     const workflowContent = readFileSync(WORKFLOW_PATH, "utf-8");
-    const workflow = yaml.load(workflowContent) as any;
+    const workflow = yaml.load(workflowContent) as GitHubWorkflow;
 
     expect(workflow.on).toEqual(expect.arrayContaining(["pull_request"]));
   });
 
   it("should have lint job", () => {
     const workflowContent = readFileSync(WORKFLOW_PATH, "utf-8");
-    const workflow = yaml.load(workflowContent) as any;
+    const workflow = yaml.load(workflowContent) as GitHubWorkflow;
 
     expect(workflow.jobs.lint).toBeDefined();
     expect(workflow.jobs.lint.steps).toEqual(
@@ -38,7 +55,7 @@ describe("CI Workflow Configuration", () => {
 
   it("should have test job", () => {
     const workflowContent = readFileSync(WORKFLOW_PATH, "utf-8");
-    const workflow = yaml.load(workflowContent) as any;
+    const workflow = yaml.load(workflowContent) as GitHubWorkflow;
 
     expect(workflow.jobs.test).toBeDefined();
     expect(workflow.jobs.test.steps).toEqual(
@@ -52,7 +69,7 @@ describe("CI Workflow Configuration", () => {
 
   it("should have build job", () => {
     const workflowContent = readFileSync(WORKFLOW_PATH, "utf-8");
-    const workflow = yaml.load(workflowContent) as any;
+    const workflow = yaml.load(workflowContent) as GitHubWorkflow;
 
     expect(workflow.jobs.build).toBeDefined();
     expect(workflow.jobs.build.steps).toEqual(
@@ -66,7 +83,7 @@ describe("CI Workflow Configuration", () => {
 
   it("should use correct Bun setup in all jobs", () => {
     const workflowContent = readFileSync(WORKFLOW_PATH, "utf-8");
-    const workflow = yaml.load(workflowContent) as any;
+    const workflow = yaml.load(workflowContent) as GitHubWorkflow;
 
     const jobs = ["lint", "test", "build"];
     jobs.forEach(jobName => {
