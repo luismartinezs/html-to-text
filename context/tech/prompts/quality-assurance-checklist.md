@@ -2,7 +2,7 @@
 description: use this prompt before merging a feature branch to main
 ---
 
-retrieve the commits within the current checkeout out branch and make sure the code changes follow:
+retrieve the commits within the current checked out branch and make sure the code changes follow:
 
 # Quality Assurance Checklist
 
