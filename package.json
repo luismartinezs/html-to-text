@@ -17,6 +17,8 @@
   "scripts": {
     "dev": "vite --host",
     "build": "rimraf build/**/* && tsc && vite build && dts-bundle-generator --config ./dts-bundle-generator.config.cjs && copyfiles ./package.json build",
+    "typecheck": "tsc",
+    "typecheck:watch": "tsc --watch",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "lint:scripts": "eslint . --ext .ts",
