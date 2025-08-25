@@ -62,6 +62,8 @@
     - [ ] Review prompting strategies before sending prompt (see below)
     - [ ] Use context7 MCP, _always_ ask it to collect 3rd party docs with context7 (or copy paste docs in prompt)
 - [ ] after implementing feature, before merging to main
+  - [ ] lint and typecheck the code -> no errors or warnings
+  - [ ] all tests should pass
   - [ ] perform security audit: repomix to gemini, gather security insights (see below security patterns). Take each issue and treat it like a task (same loop as above). Loop until Gemini no longer flags issues and you have verified them manually. Do _not_ blindly trust in anything gemini says, understand _everything_ you merge
   - [ ] Go over Quality Assurance Checklist (see checklist below)
 
@@ -187,8 +189,6 @@ Steps to generate agents, commands and CLAUDE.md files
 
 - https://www.anthropic.com/engineering/claude-code-best-practices
 - https://www.anthropic.com/engineering/building-effective-agents
-
-
 
 # Observations
 
