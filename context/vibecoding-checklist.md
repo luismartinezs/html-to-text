@@ -187,3 +187,9 @@ Steps to generate agents, commands and CLAUDE.md files
 
 - https://www.anthropic.com/engineering/claude-code-best-practices
 - https://www.anthropic.com/engineering/building-effective-agents
+
+
+
+# Observations
+
+- Claude very easily produces overkill and overengineered code, it is too eager
