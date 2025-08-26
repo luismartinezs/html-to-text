@@ -36,6 +36,7 @@ interface Parse5Node {
   nodeName?: string;
   value?: string;
   childNodes?: Parse5Node[];
+  attrs?: { name: string; value: string }[];
 }
 
 function extractTextFromNode(node: Parse5Node): string {
@@ -80,6 +81,32 @@ function extractTextFromNode(node: Parse5Node): string {
     // Special handling for br tags
     if (tagName === "br") {
       result += "\n";
+    }
+
+    // Special handling for anchor tags
+    if (tagName === "a") {
+      const href = node.attrs?.find(attr => attr.name === "href")?.value;
+
+      // Extract text content from child nodes
+      let textContent = "";
+      if (node.childNodes) {
+        for (const child of node.childNodes) {
+          textContent += extractTextFromNode(child);
+        }
+      }
+
+      if (href && textContent.trim()) {
+        // Link with text content: [text](href)
+        result += `[${textContent}](${href})`;
+      } else if (href && !textContent.trim()) {
+        // Link without text content: just href
+        result += href;
+      } else {
+        // No href: just text content
+        result += textContent;
+      }
+
+      return result;
     }
 
     // Recursively process child nodes
