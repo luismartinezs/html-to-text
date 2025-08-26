@@ -37,6 +37,7 @@ console.log(text); // Output: "Hello world!\n"
 Converts HTML to plain text using proper DOM parsing. Handles block-level elements, HTML entities, and malformed HTML gracefully.
 
 **Features:**
+
 - Block-level elements (p, div, h1-h6, li, br, etc.) convert to line breaks
 - HTML entities are properly decoded (&nbsp;, &amp;, &lt;, &gt;, &quot;, &#39;, etc.)
 - Secure parsing - no script execution or innerHTML risks
@@ -60,7 +61,9 @@ htmlToText("<p>Hello world</p>"); // "Hello world\n"
 htmlToText("<p>First</p><p>Second</p>"); // "First\nSecond\n"
 
 // Complex HTML with entities
-htmlToText('<div><h1>Title</h1><p>A&amp;B &lt;test&gt;</p><br><p>Final</p></div>');
+htmlToText(
+  "<div><h1>Title</h1><p>A&amp;B &lt;test&gt;</p><br><p>Final</p></div>"
+);
 // "Title\nA&B <test>\n\nFinal\n"
 
 // Line breaks

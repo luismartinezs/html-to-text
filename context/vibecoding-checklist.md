@@ -66,6 +66,7 @@
   - [ ] all tests should pass
   - [ ] perform security audit: repomix to gemini, gather security insights (see below security patterns). Take each issue and treat it like a task (same loop as above). Loop until Gemini no longer flags issues and you have verified them manually. Do _not_ blindly trust in anything gemini says, understand _everything_ you merge
   - [ ] Go over Quality Assurance Checklist (see checklist below)
+  - [ ] run this prompt `go over the checklist in @PR-CHECKLIST.md and complete for current branch. think hard`
 
 1. **Codebase Audit**
    Do this before merging to main and before releasing to production
