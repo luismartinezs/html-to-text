@@ -31,7 +31,7 @@ Our security model is based on **text extraction only**:
 htmlToText('<script>alert("xss")</script>Hello World');
 // Result: "Hello World" - script content is ignored
 
-// ✅ SAFE: Malicious attributes are ignored  
+// ✅ SAFE: Malicious attributes are ignored
 htmlToText('<div onclick="malicious()">Click me</div>');
 // Result: "Click me" - onclick attribute is completely ignored
 
@@ -45,7 +45,7 @@ htmlToText('<img src="x" onerror="alert(1)">');
 Key security features:
 
 - **No browser DOM**: Never uses `innerHTML`, `outerHTML`, or browser-based parsing
-- **Server-side safe**: Works safely in Node.js environments without browser vulnerabilities  
+- **Server-side safe**: Works safely in Node.js environments without browser vulnerabilities
 - **Static parsing**: No dynamic code execution during HTML processing
 - **Content extraction only**: Only extracts text content, never processes or executes HTML
 
@@ -53,13 +53,13 @@ Key security features:
 
 This library is resistant to common HTML-based attacks:
 
-| Attack Type | Protection |
-|-------------|------------|
-| XSS (Cross-site scripting) | Scripts are parsed but never executed |
-| HTML injection | Only text content is extracted |
-| Attribute-based attacks | All attributes are ignored |
-| Entity-based attacks | Safe entity decoding with `he` library |
-| Malformed HTML | parse5 handles malformed input gracefully |
+| Attack Type                | Protection                                |
+| -------------------------- | ----------------------------------------- |
+| XSS (Cross-site scripting) | Scripts are parsed but never executed     |
+| HTML injection             | Only text content is extracted            |
+| Attribute-based attacks    | All attributes are ignored                |
+| Entity-based attacks       | Safe entity decoding with `he` library    |
+| Malformed HTML             | parse5 handles malformed input gracefully |
 
 ## Reporting Security Issues
 

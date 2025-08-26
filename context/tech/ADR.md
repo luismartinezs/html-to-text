@@ -3,27 +3,33 @@
 ## Decision: Use parse5 for HTML Parsing
 
 ### Status
+
 Accepted
 
 ### Context
+
 Our HTML-to-text conversion library needs a reliable method to parse HTML documents and extract meaningful text content. The core challenge is handling malformed HTML, nested structures, and various edge cases while maintaining security and performance.
 
 ### Alternatives Considered
 
 #### 1. Regular Expressions
+
 - **Pros**: Simple, lightweight, no dependencies
 - **Cons**: Cannot handle nested structures, fails on malformed HTML, security risks with complex patterns
 
 #### 2. jsdom
+
 - **Pros**: Full DOM implementation, comprehensive API
 - **Cons**: Heavy dependency (~2MB), includes unnecessary browser APIs, performance overhead
 
 #### 3. node-html-parser
+
 - **Pros**: Fast, lightweight, good performance
 - **Cons**: Less spec-compliant, limited error handling for malformed HTML
 
 #### 4. parse5 (Selected)
-- **Pros**: 
+
+- **Pros**:
   - HTML5 specification compliant
   - Lightweight and focused solely on parsing
   - Excellent security track record
