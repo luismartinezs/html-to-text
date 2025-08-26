@@ -4,6 +4,20 @@ import { decode } from "he";
 
 export { sum } from "./sum";
 
+/**
+ * Converts HTML content to plain text by parsing the HTML structure,
+ * extracting text content, and decoding HTML entities.
+ *
+ * @param html - The HTML string to convert to plain text
+ * @returns The extracted plain text with normalized whitespace
+ *
+ * @example
+ * ```typescript
+ * const html = '<div><p>Hello <strong>world</strong>!</p><br><p>How are you?</p></div>';
+ * const text = htmlToText(html);
+ * console.log(text); // "Hello world!\n\nHow are you?\n\n"
+ * ```
+ */
 export function htmlToText(html: string): string {
   if (!html) return "";
 
@@ -91,6 +105,20 @@ function extractTextFromNode(node: Parse5Node): string {
   return result;
 }
 
+/**
+ * Parses HTML content into a structured document fragment object using parse5.
+ * This provides access to the raw parsed HTML structure for advanced use cases.
+ *
+ * @param html - The HTML string to parse
+ * @returns The parsed document fragment object containing the HTML structure
+ *
+ * @example
+ * ```typescript
+ * const html = '<div><p>Hello world</p></div>';
+ * const fragment = parseHtml(html);
+ * console.log(fragment); // Parse5 document fragment with childNodes array
+ * ```
+ */
 export function parseHtml(html: string): object {
   return parseFragment(html);
 }
