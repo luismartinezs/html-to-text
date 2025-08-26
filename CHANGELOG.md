@@ -2,6 +2,22 @@
 
 All notable changes to the "html-to-text" project will be documented in this file, using this format:
 
+## [1.0.0] - 2025-08-26
+
+### Breaking Changes
+
+- **BREAKING**: Complete refactor of htmlToText function - now uses parse5 for proper DOM parsing instead of simple regex
+- **BREAKING**: Block-level elements (p, div, h1-h6, li, br, etc.) now convert to line breaks instead of being stripped
+- **feat**: Add parseHtml function for accessing raw parsed HTML structure
+- **feat**: Integrate parse5 library for HTML5 specification-compliant parsing
+- **feat**: Integrate he library for proper HTML entity decoding (supports &nbsp;, &amp;, &lt;, &gt;, &quot;, &#39;, etc.)
+- **feat**: Enhanced security through proper DOM parsing - no innerHTML or script execution risks
+- **feat**: Add comprehensive security policy documentation
+- **feat**: Add architectural decision record (ADR) documenting parse5 choice
+- **fix**: Properly handle malformed HTML through spec-compliant parsing
+- **fix**: Convert non-breaking spaces to regular spaces
+- **fix**: Handle nested block elements correctly
+
 ## [0.1.0] - 2025-08-25
 
 - **feat**: Implement core htmlToText function that strips HTML tags from input strings
