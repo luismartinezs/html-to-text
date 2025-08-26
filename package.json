@@ -58,5 +58,8 @@
     "typescript-eslint": "^8.36.0",
     "vite": "^7.0.3",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "parse5": "^8.0.0"
   }
 }

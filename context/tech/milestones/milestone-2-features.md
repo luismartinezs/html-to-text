@@ -1,6 +1,6 @@
 # Milestone 2 Feature Breakdown
 
-## [ ] Feature 1: Integrate `parse5` for AST Generation
+## [x] Feature 1: Integrate `parse5` for AST Generation
 
 - **Scope:** 3
 - **Description:** Add `parse5` to the project and implement initial HTML-to-AST parsing within the library.
