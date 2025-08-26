@@ -75,31 +75,33 @@
   - [ ] Check for security patterns (see below)
 - [ ] Quality assurance checklist (see below)
 
-# (A)EIPME loop
+# coding workflows
 
-## Ask
+## (A)EIPME loop
+
+### Ask
 
 - [ ] Consider a initial step, prompt AI to ask questions about task. You can ask AI to score task clarity from 0 to 100 and have 95 threshold
 
-## Explore
+### Explore
 
 - start here for medium complexity tasks
 
 * [ ] prompt AI to explore related code and functions, gather context. Do not code
 
-## Inquire
+### Inquire
 
 - [ ] read output from "explore" and ask questions, the goal is to collect all the necessary minimal context, and also ignore unnecessary context
 
-## Plan
+### Plan
 
 - [ ] based on all the gathered context, write implementation plan, do not code
 
-## Minimize
+### Minimize
 
 - [ ] review the plan, simplify it to something minimal that can be tested. Do not code
 
-## Execute
+### Execute
 
 - start here directly for low complexity tasks
 
@@ -113,7 +115,15 @@
 * [ ] test code: _always_ test manually, all tests must pass, update any necessary tests, add any necessary tests. If anything is broken, see debugging
 * [ ] Document changes: update CHANGELOG.md, update CLAUDE.md files if necessary. Commit changes and go to next step
 
-# debugging
+## TDD
+
+There are commands for these steps
+- define acceptance criteria
+- scaffold tests
+- implement
+- review code
+
+## debugging
 
 - [ ] ask AI to fix it (with error as context), if after 3 attempts still broken, REVERT (undo everything, tweak prompt and start from scratch)
 - [ ] stubborn bugs: overview of the components the error is coming from and list top suspects that cause the error. Add logs. Give logs as context to diagnose cause of error. Then fix cause
