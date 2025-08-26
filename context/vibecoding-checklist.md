@@ -45,7 +45,7 @@
 1. **Coding loop**
 
 - [ ] Select next milestone to complete
-- [ ] Split milestone into features. Provide PRD, tech spec and milestones docs as context
+- [ ] Split milestone into features. Provide PRD, tech spec and milestones docs as context (004-list-features.md)
 - [ ] Select next feature to implement
 - [ ] Evaluate feature complexity (rough planning poker)
 - [ ] checkout to a new feature branch

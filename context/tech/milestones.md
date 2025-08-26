@@ -39,7 +39,7 @@
 
 ---
 
-## [ ] Milestone 2
+## [x] Milestone 2
 
 - **Name:** Core Parsing & Entities
 - **Objective:** Implement HTML parsing and entity decoding.
