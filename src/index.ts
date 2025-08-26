@@ -8,7 +8,7 @@ export function htmlToText(html: string): string {
   if (!html) return "";
 
   // Replace block-level elements with their content followed by newlines
-  let result = html
+  const result = html
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<\/(p|div|h[1-6]|li)>/gi, "\n")
     .replace(/<[^>]*>/g, "");
