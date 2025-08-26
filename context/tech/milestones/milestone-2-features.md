@@ -16,7 +16,7 @@
 
 ---
 
-## [ ] Feature 2: Integrate `he` for Entity Decoding
+## [x] Feature 2: Integrate `he` for Entity Decoding
 
 - **Scope:** 2
 - **Description:** Decode HTML entities into plain text equivalents using the `he` library.

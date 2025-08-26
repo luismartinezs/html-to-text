@@ -30,6 +30,7 @@
     "uninstall-husky": "bun remove husky --no-save && git config --unset core.hooksPath && bunx rimraf .husky"
   },
   "devDependencies": {
+    "@types/he": "^1.2.3",
     "@types/js-yaml": "^4.0.9",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^24.0.10",
@@ -60,6 +61,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "he": "^1.2.0",
     "parse5": "^8.0.0"
   }
 }

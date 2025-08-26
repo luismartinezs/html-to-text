@@ -22,4 +22,31 @@ describe("htmlToText", () => {
     const result = htmlToText("");
     expect(typeof result).toBe("string");
   });
+
+  describe("HTML entity decoding", () => {
+    it("should decode non-breaking space entity", () => {
+      const result = htmlToText("<p>Hello&nbsp;World</p>");
+      expect(result).toBe("Hello World");
+    });
+
+    it("should decode ampersand entity", () => {
+      const result = htmlToText("<div>A&amp;B</div>");
+      expect(result).toBe("A&B");
+    });
+
+    it("should decode angle bracket entities", () => {
+      const result = htmlToText("<span>&lt;script&gt;</span>");
+      expect(result).toBe("<script>");
+    });
+
+    it("should decode quote entities", () => {
+      const result = htmlToText("<em>&quot;quoted&quot;</em>");
+      expect(result).toBe('"quoted"');
+    });
+
+    it("should decode apostrophe entity", () => {
+      const result = htmlToText("<strong>&#39;apostrophe&#39;</strong>");
+      expect(result).toBe("'apostrophe'");
+    });
+  });
 });
