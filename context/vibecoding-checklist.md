@@ -118,6 +118,7 @@
 ## TDD
 
 There are commands for these steps
+
 - define acceptance criteria
 - scaffold tests
 - implement

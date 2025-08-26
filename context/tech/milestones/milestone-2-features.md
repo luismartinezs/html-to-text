@@ -1,6 +1,7 @@
 # Milestone 2 Feature Breakdown
 
 ## [ ] Feature 1: Integrate `parse5` for AST Generation
+
 - **Scope:** 3
 - **Description:** Add `parse5` to the project and implement initial HTML-to-AST parsing within the library.
 - **Tasks:**
@@ -16,6 +17,7 @@
 ---
 
 ## [ ] Feature 2: Integrate `he` for Entity Decoding
+
 - **Scope:** 2
 - **Description:** Decode HTML entities into plain text equivalents using the `he` library.
 - **Tasks:**
@@ -31,6 +33,7 @@
 ---
 
 ## [ ] Feature 3: Convert Block-Level Elements to Line Breaks
+
 - **Scope:** 3
 - **Description:** Extend AST traversal to insert newlines for block-level elements (`<p>`, `<br>`, `<li>`, etc.).
 - **Tasks:**
@@ -46,6 +49,7 @@
 ---
 
 # Validation
+
 - All three features (parse5 integration, he integration, block-level newlines) are included as described in Milestone 2 of `milestones.md`.
 - Each feature has Scope, Description, Tasks, Acceptance Criteria, Dependencies, and Estimate.
 - No missing data detected in `prd.md` or `tech-spec.md` relevant to Milestone 2.
