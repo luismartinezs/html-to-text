@@ -32,7 +32,7 @@
 
 ---
 
-## [ ] Feature 3: Convert Block-Level Elements to Line Breaks
+## [x] Feature 3: Convert Block-Level Elements to Line Breaks
 
 - **Scope:** 3
 - **Description:** Extend AST traversal to insert newlines for block-level elements (`<p>`, `<br>`, `<li>`, etc.).

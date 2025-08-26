@@ -26,12 +26,12 @@ describe("htmlToText", () => {
   describe("HTML entity decoding", () => {
     it("should decode non-breaking space entity", () => {
       const result = htmlToText("<p>Hello&nbsp;World</p>");
-      expect(result).toBe("Hello World");
+      expect(result).toBe("Hello World\n");
     });
 
     it("should decode ampersand entity", () => {
       const result = htmlToText("<div>A&amp;B</div>");
-      expect(result).toBe("A&B");
+      expect(result).toBe("A&B\n");
     });
 
     it("should decode angle bracket entities", () => {
