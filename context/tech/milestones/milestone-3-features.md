@@ -5,7 +5,7 @@
 
 ---
 
-## [ ] Feature 3.1: Link Conversion
+## [x] Feature 3.1: Link Conversion
 
 **Scope:** 2 points
 **Priority:** High
