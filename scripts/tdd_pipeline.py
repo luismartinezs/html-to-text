@@ -59,6 +59,26 @@ async def query_collect(client: ClaudeSDKClient, prompt: str) -> Tuple[str, str]
             break
     return ("".join(chunks).strip(), session_id)
 
+async def run_step(
+    repo: Path,
+    permission_mode: str,
+    prompt: str,
+    allowed_tools: list[str],
+    session_id: str | None,
+    max_turns: int = 50,
+) -> Tuple[str, str]:
+    """Run one step with its own client. Resume the same session if provided."""
+    async with ClaudeSDKClient(
+        options=ClaudeCodeOptions(
+            cwd=str(repo),
+            permission_mode=permission_mode,
+            allowed_tools=allowed_tools,
+            resume=session_id,
+            max_turns=max_turns,
+        )
+    ) as client:
+        return await query_collect(client, prompt)
+
 # ---------- Tiny template rendering ----------
 class DefaultDict(dict):
     def __missing__(self, k): return ""
@@ -90,38 +110,40 @@ async def run_workflow(repo: Path, cfg_path: Path) -> None:
     ctx: Dict[str, str] = {"feature_text": feature_text}
     session_id = ""
 
-    async with ClaudeSDKClient(options=ClaudeCodeOptions(cwd=str(repo), permission_mode=permission_mode, max_turns=50)) as base_client:
-        for step in steps:
-            tools = step.get("allowed_tools", ["Read"])
-            client = base_client.with_options(ClaudeCodeOptions(allowed_tools=tools))
+    for step in steps:
+        tools = step.get("allowed_tools", ["Read"])
 
-            # Prompt selection
-            prompt = step.get("prompt")
-            if not prompt and step.get("prompt_if_tests") and step.get("prompt_if_no_tests"):
-                if ctx.get("tests_to_pass"):
-                    prompt = step["prompt_if_tests"]
-                else:
-                    prompt = step["prompt_if_no_tests"]
-            if not prompt: raise SystemExit(f"Step '{step.get('id','?')}' has no prompt.")
+        # Prompt selection
+        prompt = step.get("prompt")
+        if not prompt and step.get("prompt_if_tests") and step.get("prompt_if_no_tests"):
+            prompt = step["prompt_if_tests"] if ctx.get("tests_to_pass") else step["prompt_if_no_tests"]
+        if not prompt:
+            raise SystemExit(f"Step '{step.get('id','?')}' has no prompt.")
 
-            text, sid = await query_collect(client, render(prompt, ctx))
-            session_id = session_id or sid  # first ResultMessage carries it
+        text, sid = await run_step(
+            repo=repo,
+            permission_mode=permission_mode,
+            prompt=render(prompt, ctx),
+            allowed_tools=tools,
+            session_id=session_id or None,
+        )
+        session_id = session_id or sid  # capture after first step
 
-            # Save outputs into context if requested
-            if "save_as" in step:
-                ctx[step["save_as"]] = text
+        # Save outputs into context if requested
+        if "save_as" in step:
+            ctx[step["save_as"]] = text
 
-            # Enforce repo change if required
-            if step.get("require_repo_change"):
-                if git_clean(repo):
-                    sys.exit(f"{step.get('id','step')}: no git changes. Aborted.")
+        # Enforce repo change if required
+        if step.get("require_repo_change"):
+            if git_clean(repo):
+                sys.exit(f"{step.get('id','step')}: no git changes. Aborted.")
 
-            # Commit tests if requested and set tests_to_pass
-            if step.get("commit_tests"):
-                changed_tests = git_changed_matching(repo, test_pat)
-                git_commit(repo, changed_tests, step.get("commit_message", "chore(tdd): update tests"))
-                if step.get("set_var"):
-                    ctx[step["set_var"]] = " ".join(changed_tests)
+        # Commit tests if requested and set tests_to_pass
+        if step.get("commit_tests"):
+            changed_tests = git_changed_matching(repo, test_pat)
+            git_commit(repo, changed_tests, step.get("commit_message", "chore(tdd): update tests"))
+            if step.get("set_var"):
+                ctx[step["set_var"]] = " ".join(changed_tests)
 
     print("\nSession:", session_id or "<unknown>")
     print("Tests considered:")
