@@ -39,11 +39,17 @@ interface Parse5Node {
   attrs?: { name: string; value: string }[];
 }
 
+interface ExtractTextOptions {
+  depth?: number;
+  inList?: boolean;
+  listContext?: { type: "ul" | "ol"; counter: number } | null;
+}
+
 function extractTextFromNode(
   node: Parse5Node,
-  depth: number = 0,
-  inList: boolean = false
+  options: ExtractTextOptions = {}
 ): string {
+  const { depth = 0, inList = false, listContext = null } = options;
   let result = "";
 
   if (!node) return result;
@@ -95,7 +101,11 @@ function extractTextFromNode(
       let textContent = "";
       if (node.childNodes) {
         for (const child of node.childNodes) {
-          textContent += extractTextFromNode(child, depth, inList);
+          textContent += extractTextFromNode(child, {
+            depth,
+            inList,
+            listContext,
+          });
         }
       }
 
@@ -115,20 +125,32 @@ function extractTextFromNode(
 
     // Special handling for list items
     if (tagName === "li") {
-      if (inList) {
+      if (inList && listContext) {
         const indent = "  ".repeat(depth);
-        result += `${indent}* `;
+
+        if (listContext.type === "ul") {
+          result += `${indent}* `;
+        } else {
+          result += `${indent}${listContext.counter}. `;
+        }
 
         // Process child nodes
         let hasNestedList = false;
         if (node.childNodes) {
           for (const child of node.childNodes) {
-            if (child.nodeName === "ul") {
+            if (child.nodeName === "ul" || child.nodeName === "ol") {
               hasNestedList = true;
               result += "\n";
-              result += extractTextFromNode(child, depth + 1, true);
+              result += extractTextFromNode(child, {
+                depth: depth + 1,
+                inList: true,
+              });
             } else {
-              result += extractTextFromNode(child, depth, inList);
+              result += extractTextFromNode(child, {
+                depth,
+                inList,
+                listContext,
+              });
             }
           }
         }
@@ -143,9 +165,36 @@ function extractTextFromNode(
 
     // Special handling for unordered lists
     if (tagName === "ul") {
+      const listContext = { type: "ul" as const, counter: 1 };
       if (node.childNodes) {
         for (const child of node.childNodes) {
-          result += extractTextFromNode(child, depth, true);
+          result += extractTextFromNode(child, {
+            depth,
+            inList: true,
+            listContext,
+          });
+        }
+      }
+      return result;
+    }
+
+    // Special handling for ordered lists
+    if (tagName === "ol") {
+      const startAttr = node.attrs?.find(attr => attr.name === "start");
+      const startValue = startAttr ? parseInt(startAttr.value, 10) || 1 : 1;
+      let currentCounter = startValue;
+
+      if (node.childNodes) {
+        for (const child of node.childNodes) {
+          const listContext = { type: "ol" as const, counter: currentCounter };
+          result += extractTextFromNode(child, {
+            depth,
+            inList: true,
+            listContext,
+          });
+          if (child.nodeName === "li") {
+            currentCounter++;
+          }
         }
       }
       return result;
@@ -154,7 +203,7 @@ function extractTextFromNode(
     // Recursively process child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {
-        result += extractTextFromNode(child, depth, inList);
+        result += extractTextFromNode(child, { depth, inList, listContext });
       }
     }
 
@@ -167,7 +216,7 @@ function extractTextFromNode(
   // Handle document fragments and other node types with childNodes
   if (node.childNodes && !node.nodeName) {
     for (const child of node.childNodes) {
-      result += extractTextFromNode(child, depth, inList);
+      result += extractTextFromNode(child, { depth, inList, listContext });
     }
   }
 
