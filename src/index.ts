@@ -1,8 +1,43 @@
 import "./style.css";
 import { parseFragment } from "parse5";
 import { decode } from "he";
+import { ElementRouter } from "./element-router";
+import { createDefaultContext } from "./processing-context";
+
+// Import all slice handlers
+import { TextExtractionHandler } from "./slices/text-extraction";
+import { LinkConversionHandler } from "./slices/link-conversion";
+import { BlockFormattingHandler } from "./slices/block-formatting";
+import { LineBreakHandler } from "./slices/line-break";
+import { ListFormattingHandler } from "./slices/list-formatting";
+import { TableConversionHandler } from "./slices/table-conversion";
 
 export { sum } from "./sum";
+
+// Create slice instances
+const textExtractionHandler = new TextExtractionHandler();
+const linkConversionHandler = new LinkConversionHandler();
+const blockFormattingHandler = new BlockFormattingHandler();
+const lineBreakHandler = new LineBreakHandler();
+const listFormattingHandler = new ListFormattingHandler();
+const tableConversionHandler = new TableConversionHandler();
+
+// Create router and register all slices
+// Order matters: more specific handlers should come before more general ones
+const router = new ElementRouter([
+  textExtractionHandler,
+  linkConversionHandler,
+  lineBreakHandler,
+  listFormattingHandler, // List handler must come before block handler
+  tableConversionHandler,
+  blockFormattingHandler, // Block handler should come last as it's most general
+]);
+
+// Set router references for slices that need to process child nodes
+linkConversionHandler.setRouter(router);
+blockFormattingHandler.setRouter(router);
+listFormattingHandler.setRouter(router);
+tableConversionHandler.setRouter(router);
 
 /**
  * Converts HTML content to plain text by parsing the HTML structure,
@@ -24,265 +59,15 @@ export function htmlToText(html: string): string {
   // Parse HTML using parse5 to create DOM tree
   const fragment = parseFragment(html);
 
-  // Recursively extract text content from the DOM tree
-  const text = extractTextFromNode(fragment);
+  // Create processing context
+  const context = createDefaultContext();
+
+  // Use ElementRouter to process the DOM tree with vertical slices
+  const text = router.processFragment(fragment, context);
 
   // Decode HTML entities and normalize non-breaking spaces
   const decoded = decode(text);
   return decoded.replace(/\u00A0/g, " ") || "";
-}
-
-interface Parse5Node {
-  nodeName?: string;
-  value?: string;
-  childNodes?: Parse5Node[];
-  attrs?: { name: string; value: string }[];
-}
-
-interface ExtractTextOptions {
-  depth?: number;
-  inList?: boolean;
-  listContext?: { type: "ul" | "ol"; counter: number } | null;
-}
-
-/**
- * Sanitizes a URL by checking if it uses a safe protocol.
- * Only allows http, https, and mailto protocols.
- *
- * @param url - The URL to sanitize
- * @returns The original URL if safe, undefined if unsafe
- */
-function sanitizeUrl(url: string | undefined): string | undefined {
-  if (!url) return undefined;
-
-  try {
-    // Handle relative URLs by providing a placeholder base
-    const parsedUrl = new URL(url, "http://placeholder.com");
-    if (["http:", "https:", "mailto:"].includes(parsedUrl.protocol)) {
-      return url;
-    }
-    return undefined;
-  } catch {
-    // Invalid URL format
-    return undefined;
-  }
-}
-
-function extractTextFromNode(
-  node: Parse5Node,
-  options: ExtractTextOptions = {}
-): string {
-  const { depth = 0, inList = false, listContext = null } = options;
-  let result = "";
-
-  if (!node) return result;
-
-  // Handle text nodes
-  if (node.nodeName === "#text") {
-    return node.value || "";
-  }
-
-  // Handle element nodes
-  if (node.nodeName && node.childNodes) {
-    const tagName = node.nodeName.toLowerCase();
-
-    // Add line break before block elements
-    const blockElements = [
-      "p",
-      "div",
-      "h1",
-      "h2",
-      "h3",
-      "h4",
-      "h5",
-      "h6",
-      "li",
-      "section",
-      "article",
-      "header",
-      "footer",
-      "main",
-      "aside",
-      "nav",
-    ];
-    const shouldAddLineBreak = blockElements.includes(tagName);
-
-    if (shouldAddLineBreak && result.length > 0) {
-      result += "\n";
-    }
-
-    // Special handling for br tags
-    if (tagName === "br") {
-      result += "\n";
-    }
-
-    // Special handling for anchor tags
-    if (tagName === "a") {
-      const href = node.attrs?.find(attr => attr.name === "href")?.value;
-      const sanitizedHref = sanitizeUrl(href);
-
-      // Extract text content from child nodes
-      let textContent = "";
-      if (node.childNodes) {
-        for (const child of node.childNodes) {
-          textContent += extractTextFromNode(child, {
-            depth,
-            inList,
-            listContext,
-          });
-        }
-      }
-
-      if (sanitizedHref && textContent.trim()) {
-        // Link with text content: [text](href)
-        result += `[${textContent}](${sanitizedHref})`;
-      } else if (sanitizedHref && !textContent.trim()) {
-        // Link without text content: just href
-        result += sanitizedHref;
-      } else {
-        // No href or unsafe href: just text content
-        result += textContent;
-      }
-
-      return result;
-    }
-
-    // Special handling for list items
-    if (tagName === "li") {
-      if (inList && listContext) {
-        const indent = "  ".repeat(depth);
-
-        if (listContext.type === "ul") {
-          result += `${indent}* `;
-        } else {
-          result += `${indent}${listContext.counter}. `;
-        }
-
-        // Process child nodes
-        let hasNestedList = false;
-        if (node.childNodes) {
-          for (const child of node.childNodes) {
-            if (child.nodeName === "ul" || child.nodeName === "ol") {
-              hasNestedList = true;
-              result += "\n";
-              result += extractTextFromNode(child, {
-                depth: depth + 1,
-                inList: true,
-              });
-            } else {
-              result += extractTextFromNode(child, {
-                depth,
-                inList,
-                listContext,
-              });
-            }
-          }
-        }
-
-        if (!hasNestedList) {
-          result += "\n";
-        }
-        return result;
-      }
-      // If not in a list, treat as regular block element
-    }
-
-    // Special handling for unordered lists
-    if (tagName === "ul") {
-      const listContext = { type: "ul" as const, counter: 1 };
-      if (node.childNodes) {
-        for (const child of node.childNodes) {
-          result += extractTextFromNode(child, {
-            depth,
-            inList: true,
-            listContext,
-          });
-        }
-      }
-      return result;
-    }
-
-    // Special handling for ordered lists
-    if (tagName === "ol") {
-      const startAttr = node.attrs?.find(attr => attr.name === "start");
-      const startValue = startAttr ? parseInt(startAttr.value, 10) || 1 : 1;
-      let currentCounter = startValue;
-
-      if (node.childNodes) {
-        for (const child of node.childNodes) {
-          const listContext = { type: "ol" as const, counter: currentCounter };
-          result += extractTextFromNode(child, {
-            depth,
-            inList: true,
-            listContext,
-          });
-          if (child.nodeName === "li") {
-            currentCounter++;
-          }
-        }
-      }
-      return result;
-    }
-
-    // Special handling for table elements
-    if (tagName === "table") {
-      if (node.childNodes) {
-        for (const child of node.childNodes) {
-          result += extractTextFromNode(child, { depth, inList, listContext });
-        }
-      }
-      return result;
-    }
-
-    if (tagName === "tr") {
-      const cells: string[] = [];
-      if (node.childNodes) {
-        for (const child of node.childNodes) {
-          if (child.nodeName === "td" || child.nodeName === "th") {
-            let cellContent = "";
-            if (child.childNodes) {
-              for (const cellChild of child.childNodes) {
-                cellContent += extractTextFromNode(cellChild, {
-                  depth,
-                  inList,
-                  listContext,
-                });
-              }
-            }
-            cells.push(cellContent);
-          }
-        }
-      }
-      result += "| " + cells.join(" | ") + " |\n";
-      return result;
-    }
-
-    if (tagName === "td" || tagName === "th") {
-      // Cell content is handled by tr, so we don't process it here
-      return "";
-    }
-
-    // Recursively process child nodes
-    if (node.childNodes) {
-      for (const child of node.childNodes) {
-        result += extractTextFromNode(child, { depth, inList, listContext });
-      }
-    }
-
-    // Add line break after block elements
-    if (shouldAddLineBreak) {
-      result += "\n";
-    }
-  }
-
-  // Handle document fragments and other node types with childNodes
-  if (node.childNodes && !node.nodeName) {
-    for (const child of node.childNodes) {
-      result += extractTextFromNode(child, { depth, inList, listContext });
-    }
-  }
-
-  return result;
 }
 
 /**
