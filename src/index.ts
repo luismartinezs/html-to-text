@@ -200,6 +200,44 @@ function extractTextFromNode(
       return result;
     }
 
+    // Special handling for table elements
+    if (tagName === "table") {
+      if (node.childNodes) {
+        for (const child of node.childNodes) {
+          result += extractTextFromNode(child, { depth, inList, listContext });
+        }
+      }
+      return result;
+    }
+
+    if (tagName === "tr") {
+      const cells: string[] = [];
+      if (node.childNodes) {
+        for (const child of node.childNodes) {
+          if (child.nodeName === "td" || child.nodeName === "th") {
+            let cellContent = "";
+            if (child.childNodes) {
+              for (const cellChild of child.childNodes) {
+                cellContent += extractTextFromNode(cellChild, {
+                  depth,
+                  inList,
+                  listContext,
+                });
+              }
+            }
+            cells.push(cellContent);
+          }
+        }
+      }
+      result += "| " + cells.join(" | ") + " |\n";
+      return result;
+    }
+
+    if (tagName === "td" || tagName === "th") {
+      // Cell content is handled by tr, so we don't process it here
+      return "";
+    }
+
     // Recursively process child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {

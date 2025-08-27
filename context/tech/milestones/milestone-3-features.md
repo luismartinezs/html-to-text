@@ -95,7 +95,7 @@ Convert HTML ordered lists (`<ol>`) to numbered format with proper numbering and
 
 ---
 
-## [ ] Feature 3.4: Basic Table Conversion
+## [x] Feature 3.4: Basic Table Conversion
 
 **Scope:** 3 points
 **Priority:** Medium
