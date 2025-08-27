@@ -6,27 +6,27 @@
       "id": "acceptance",
       "allowed_tools": ["Read"],
       "save_as": "acc_text",
-      "prompt": "/tdd:acceptance\n\n{feature_text}"
+      "prompt": "/engineering:tdd:define-acceptance-criteria\n\n{feature_text}"
     },
     {
       "id": "test",
       "allowed_tools": ["Read", "Write", "Bash"],
       "require_repo_change": true,
       "commit_tests": true,
-      "commit_message": "chore(tdd): add/update tests from /tdd:test",
+      "commit_message": "chore(tdd): add/update tests from /engineering:tdd:scaffold-tests",
       "set_var": "tests_to_pass",
-      "prompt": "/tdd:test\n\n{acc_text}\n\nMake concrete automated tests. Create files if missing."
+      "prompt": "/engineering:tdd:scaffold-tests\n\n{acc_text}\n\nMake concrete automated tests. Create files if missing."
     },
     {
       "id": "code",
       "allowed_tools": ["Read", "Write", "Bash"],
-      "prompt_if_tests": "/tdd:code tests: {tests_to_pass}",
-      "prompt_if_no_tests": "/tdd:code tests: <none detected>\n\nNo test files detected. Use acceptance criteria to infer failing tests and implement minimal code.\n\n{acc_text}"
+      "prompt_if_tests": "/engineering:tdd:implement tests: {tests_to_pass}",
+      "prompt_if_no_tests": "/engineering:tdd:implement tests: <none detected>\n\nNo test files detected. Use acceptance criteria to infer failing tests and implement minimal code.\n\n{acc_text}"
     },
     {
       "id": "review",
       "allowed_tools": ["Read", "Write", "Bash"],
-      "prompt": "/tdd:review"
+      "prompt": "/engineering:tdd:review-code"
     }
   ]
 }
