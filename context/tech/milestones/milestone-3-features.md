@@ -35,7 +35,7 @@ Convert HTML anchor tags (`<a>`) to markdown-style link format with proper text 
 
 ---
 
-## [ ] Feature 3.2: Unordered List Conversion
+## [x] Feature 3.2: Unordered List Conversion
 
 **Scope:** 2 points
 **Priority:** High
