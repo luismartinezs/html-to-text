@@ -1,0 +1,30 @@
+repo_path: "."
+workflow_path: "scripts/workflow.tdd.json"
+feature: |
+  Feature 3.3: Ordered List Conversion
+
+  **Scope:** 3 points
+  **Priority:** High
+
+  ### Description
+
+  Convert HTML ordered lists (`<ol>`) to numbered format with proper numbering and nesting support.
+
+  ### Acceptance Criteria
+
+  - `<ol><li>First</li><li>Second</li></ol>` → `1. First\n2. Second\n`
+  - Each new `<ol>` restarts numbering from 1
+  - Nested ordered lists use separate numbering sequences
+  - `start` attribute support: `<ol start="5">` begins numbering at 5
+
+  ### Implementation Notes
+
+  - Maintain counter state per list level
+  - Reset counter for each new `<ol>` element
+  - Handle `start` attribute parsing
+  - Support nested numbering with indentation
+
+  ### Dependencies
+
+  - Core parsing infrastructure from Milestone 2
+  - Counter state management system
