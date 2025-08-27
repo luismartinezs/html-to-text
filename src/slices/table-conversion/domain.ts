@@ -2,7 +2,6 @@ import type {
   TableConversionInput,
   TableConversionOutput,
   TableRow,
-  TableCellInput,
   TableCellOutput,
 } from "./types";
 
@@ -44,7 +43,7 @@ export class TableConverter {
   /**
    * Extracts content from a table cell
    */
-  extractCellContent(_input: TableCellInput): TableCellOutput {
+  extractCellContent(): TableCellOutput {
     // This will be implemented by the handler using the router
     // The domain just defines the interface
     return { cellContent: "" };

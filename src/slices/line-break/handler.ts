@@ -1,8 +1,4 @@
-import type {
-  Parse5Node,
-  ProcessingContext,
-  SliceContract,
-} from "../../processing-context";
+import type { Parse5Node, SliceContract } from "../../processing-context";
 import { LineBreakHandler as LineBreakDomain } from "./domain";
 
 /**
@@ -29,7 +25,7 @@ export class LineBreakHandler implements SliceContract {
    * @param _context - Processing context (unused for br elements)
    * @returns The line break character
    */
-  handle(node: Parse5Node, _context: ProcessingContext): string {
+  handle(node: Parse5Node): string {
     if (!this.canHandle(node) || !node.nodeName) {
       return "";
     }

@@ -1,8 +1,4 @@
-import type {
-  Parse5Node,
-  ProcessingContext,
-  SliceContract,
-} from "../../processing-context";
+import type { Parse5Node, SliceContract } from "../../processing-context";
 import { TextExtractor } from "./domain";
 
 /**
@@ -26,7 +22,7 @@ export class TextExtractionHandler implements SliceContract {
    * @param _context - Processing context (unused for text nodes)
    * @returns The extracted text content
    */
-  handle(node: Parse5Node, _context: ProcessingContext): string {
+  handle(node: Parse5Node): string {
     if (!this.canHandle(node)) {
       return "";
     }

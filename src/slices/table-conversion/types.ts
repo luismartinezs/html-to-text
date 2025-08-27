@@ -27,9 +27,9 @@ export interface TableConversionOutput {
  */
 export interface TableCellInput {
   /** The table cell node (td or th) */
-  node: any; // Parse5Node type
+  node: import("../../processing-context").Parse5Node;
   /** Processing context */
-  context: any; // ProcessingContext type
+  context: import("../../processing-context").ProcessingContext;
 }
 
 /**
