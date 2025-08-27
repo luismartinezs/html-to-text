@@ -45,6 +45,29 @@ interface ExtractTextOptions {
   listContext?: { type: "ul" | "ol"; counter: number } | null;
 }
 
+/**
+ * Sanitizes a URL by checking if it uses a safe protocol.
+ * Only allows http, https, and mailto protocols.
+ *
+ * @param url - The URL to sanitize
+ * @returns The original URL if safe, undefined if unsafe
+ */
+function sanitizeUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+
+  try {
+    // Handle relative URLs by providing a placeholder base
+    const parsedUrl = new URL(url, "http://placeholder.com");
+    if (["http:", "https:", "mailto:"].includes(parsedUrl.protocol)) {
+      return url;
+    }
+    return undefined;
+  } catch {
+    // Invalid URL format
+    return undefined;
+  }
+}
+
 function extractTextFromNode(
   node: Parse5Node,
   options: ExtractTextOptions = {}
@@ -96,6 +119,7 @@ function extractTextFromNode(
     // Special handling for anchor tags
     if (tagName === "a") {
       const href = node.attrs?.find(attr => attr.name === "href")?.value;
+      const sanitizedHref = sanitizeUrl(href);
 
       // Extract text content from child nodes
       let textContent = "";
@@ -109,14 +133,14 @@ function extractTextFromNode(
         }
       }
 
-      if (href && textContent.trim()) {
+      if (sanitizedHref && textContent.trim()) {
         // Link with text content: [text](href)
-        result += `[${textContent}](${href})`;
-      } else if (href && !textContent.trim()) {
+        result += `[${textContent}](${sanitizedHref})`;
+      } else if (sanitizedHref && !textContent.trim()) {
         // Link without text content: just href
-        result += href;
+        result += sanitizedHref;
       } else {
-        // No href: just text content
+        // No href or unsafe href: just text content
         result += textContent;
       }
 
