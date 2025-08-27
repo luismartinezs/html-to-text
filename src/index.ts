@@ -39,7 +39,11 @@ interface Parse5Node {
   attrs?: { name: string; value: string }[];
 }
 
-function extractTextFromNode(node: Parse5Node): string {
+function extractTextFromNode(
+  node: Parse5Node,
+  depth: number = 0,
+  inList: boolean = false
+): string {
   let result = "";
 
   if (!node) return result;
@@ -91,7 +95,7 @@ function extractTextFromNode(node: Parse5Node): string {
       let textContent = "";
       if (node.childNodes) {
         for (const child of node.childNodes) {
-          textContent += extractTextFromNode(child);
+          textContent += extractTextFromNode(child, depth, inList);
         }
       }
 
@@ -109,10 +113,48 @@ function extractTextFromNode(node: Parse5Node): string {
       return result;
     }
 
+    // Special handling for list items
+    if (tagName === "li") {
+      if (inList) {
+        const indent = "  ".repeat(depth);
+        result += `${indent}* `;
+
+        // Process child nodes
+        let hasNestedList = false;
+        if (node.childNodes) {
+          for (const child of node.childNodes) {
+            if (child.nodeName === "ul") {
+              hasNestedList = true;
+              result += "\n";
+              result += extractTextFromNode(child, depth + 1, true);
+            } else {
+              result += extractTextFromNode(child, depth, inList);
+            }
+          }
+        }
+
+        if (!hasNestedList) {
+          result += "\n";
+        }
+        return result;
+      }
+      // If not in a list, treat as regular block element
+    }
+
+    // Special handling for unordered lists
+    if (tagName === "ul") {
+      if (node.childNodes) {
+        for (const child of node.childNodes) {
+          result += extractTextFromNode(child, depth, true);
+        }
+      }
+      return result;
+    }
+
     // Recursively process child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {
-        result += extractTextFromNode(child);
+        result += extractTextFromNode(child, depth, inList);
       }
     }
 
@@ -125,7 +167,7 @@ function extractTextFromNode(node: Parse5Node): string {
   // Handle document fragments and other node types with childNodes
   if (node.childNodes && !node.nodeName) {
     for (const child of node.childNodes) {
-      result += extractTextFromNode(child);
+      result += extractTextFromNode(child, depth, inList);
     }
   }
 
